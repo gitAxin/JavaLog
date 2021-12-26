@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+log4j2配置标签首字母一般为大写
+logback有些配置是使用的子文本的配置，而在log4j2中使用的是属性的方式进行配置
+
+SYSTEM_ERR: 红色字体输出
+SYSTEM_OUT: 黑色字体输出
+
+Configuration 标签添加属性
+    status=“debug” 日志框架本身的日志输出级别
+    monitorInterval="5" 自动加载日志配置文件的间隔时间， 单位 秒，
+-->
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"   status="off">
+
+
+    <Appenders>
+        <Console name="consoleAppender" target="SYSTEM_ERR">
+
+        </Console>
+    </Appenders>
+
+    <!-- 可以配置N多个Logger，包括Root和自定义Logger-->
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="consoleAppender"/>
+        </Root>
+
+    </Loggers>
+</Configuration>
