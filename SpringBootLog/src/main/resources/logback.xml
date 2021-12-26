@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <property name="pattern" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %c %M %L %thread %m%n"></property>
+    <property name="logDir" value="D://springboot_logback_log"></property>
+
+    <!--控制台日志-->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <!--红色字体打印-->
+        <target>
+            System.err
+        </target>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!--可拆分归档的文件日志-->
+    <appender name="rollFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志输出格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+        <!--文件位置-->
+        <file>${logDir}//roll_logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--按照时间和压缩格式声明文件名，压缩格式gz-->
+            <fileNamePattern>${logDir}//roll_logback.%d{yyyy-MM-dd}.log%i.gz</fileNamePattern>
+            <!-- 按照文件大小拆分，当日志文件达到这个大小时，将该文件以压缩格式归档 -->
+            <maxFileSize>1KB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <!--自定义logger-->
+    <logger name="cn.giteasy" level="info" additivity="false">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="rollFileAppender"/>
+    </logger>
+
+</configuration>
