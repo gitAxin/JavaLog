@@ -2,8 +2,12 @@ package cn.giteasy.jul.test;
 
 import org.junit.Test;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.spec.RSAOtherPrimeInfo;
+import java.util.logging.*;
 
 /**
  * Demo class
@@ -67,6 +71,9 @@ public class JULTest {
     }
 
 
+    /**
+     * Jul日志级别演示
+     */
     @Test
     public void testJulLevel(){
         /*
@@ -106,7 +113,337 @@ public class JULTest {
                logger.info("我是 CONFIG 信息"); //不打印，因为比我们设定的INFO级别小。
 
          */
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test.JULTest");
+
+        /*
+            仅仅只是通过setLevel（）设置日志级别，是不起作用的，需要搭配处理器handler共同设置才可以
+         */
+        //logger.setLevel(Level.FINE);
+
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+        /**
+         * 通过控制台输出，可以看到仅仅输出了info级别以及比info级别高的日志信息
+         * 由此可知 jul日志框架的默认日志级别是 info
+         *
+         *
+         *
+         * 一月 15, 2022 4:03:19 下午 cn.giteasy.jul.test.JULTest testJulLevel
+         * 严重: SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:03:19 下午 cn.giteasy.jul.test.JULTest testJulLevel
+         * 警告: WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:03:19 下午 cn.giteasy.jul.test.JULTest testJulLevel
+         * 信息: INFO>>>>>>>>>>>>>>>>>>>>>>>>>>
+         */
+
 
 
     }
+
+
+    /**
+     * 自定义日志级别演示
+     */
+    @Test
+    public void testSetDefaultLevel(){
+        //日志记录器
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test.JULTest");
+
+        //将默认的日志打印方式关掉
+        //参数设置为false ，打印日志时就不会按照默认的方式去打印了
+        logger.setUseParentHandlers(false);
+
+        //日志处理器：日志处理器有控制台处理器、文件日志处理器等等，这里演示控制台日志处理器
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        //设置输出格式
+        SimpleFormatter simpleFormatter = new SimpleFormatter();
+        consoleHandler.setFormatter(simpleFormatter);
+
+        //将处理器添加到日志记录器
+        logger.addHandler(consoleHandler);
+
+        //设置日志的打印级别
+        //日志记录器和处理器的级别均需要进行统一的设置，才可以达到日志级别自定义设置的需求
+        logger.setLevel(Level.FINE);
+        consoleHandler.setLevel(Level.FINE);
+
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+
+        /**
+         * 控制台打印结果
+         *
+         * 一月 15, 2022 4:17:38 下午 cn.giteasy.jul.test.JULTest testSetDefaultLevel
+         * 严重: SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:17:38 下午 cn.giteasy.jul.test.JULTest testSetDefaultLevel
+         * 警告: WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:17:38 下午 cn.giteasy.jul.test.JULTest testSetDefaultLevel
+         * 信息: INFO>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:17:38 下午 cn.giteasy.jul.test.JULTest testSetDefaultLevel
+         * 配置: CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>
+         * 一月 15, 2022 4:17:38 下午 cn.giteasy.jul.test.JULTest testSetDefaultLevel
+         * 详细: FINE>>>>>>>>>>>>>>>>>>>>>>>>>>
+         */
+
+
+    }
+
+    /**
+     * 文件日志打印
+     */
+    @Test
+    public void testFileLog() throws IOException {
+        //日志记录器
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test.JULTest");
+        logger.setUseParentHandlers(false);
+
+        //文件日志处理器
+        FileHandler fileHandler = new FileHandler("d:\\jul_test.log");
+        SimpleFormatter simpleFormatter = new SimpleFormatter();
+        fileHandler.setFormatter(simpleFormatter);
+        //将处理器添加到日志记录器
+        logger.addHandler(fileHandler);
+
+        logger.setLevel(Level.ALL);
+        fileHandler.setLevel(Level.ALL);
+
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+
+
+    /**
+     *文件日志与控制台日志同时打印
+     */
+    @Test
+    public void testConsoleAndFileLog() throws IOException {
+        //日志记录器
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test.JULTest");
+        logger.setUseParentHandlers(false);
+
+        //文件日志处理器
+        FileHandler fileHandler = new FileHandler("d:\\jul_test.log");
+
+        //控制台日志处理器
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+
+        SimpleFormatter simpleFormatter = new SimpleFormatter();
+        fileHandler.setFormatter(simpleFormatter);
+        consoleHandler.setFormatter(simpleFormatter);
+
+        //将处理器添加到日志记录器
+        logger.addHandler(fileHandler);
+        logger.addHandler(consoleHandler);
+
+        logger.setLevel(Level.ALL);
+        fileHandler.setLevel(Level.ALL);//文件打印日志级别
+
+        consoleHandler.setLevel(Level.CONFIG);//控制台日志打印级别
+
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+
+        /**
+         * 总结：
+         *
+         * 用户使用Logger来进行日志的记录，Logger可以持有多个处理器Handler
+         * （日志的记录使用的是Logger，日志的输出使用的是Handler）
+         * 添加了哪些handler对象，就相当于需要根据所添加的handler将日志输出到指定的位置上，例如控制台、文件．
+         *
+         */
+    }
+
+
+    /**
+     *
+     * Logger之间的父子关系
+     * JUL中Logger之间是存在"父子"关系的
+     *
+     * 注意：这种父子关系不是我们普遍认为的类之间的继承关系
+     * 关系是通过树状结构存储的（目录、包结构）
+     *
+     * JUL在初始化时会创建一个顶层RootLogger作为所有的Logger的父Logger
+     * 源码：
+     *
+     *  java.util.logging.LogManager#ensureLogManagerInitialized()；
+     *
+     *       // Create and retain Logger for the root of the namespace.
+     *       owner.rootLogger = owner.new RootLogger();
+     *       RootLogger是LogManager的内部类
+     *       owner：就是RootLogger的实例
+     *      java.util.logging.LogManager$RootLogger //默认的名称为 空串
+     *
+     *      以上的RootLogger对象作为树状结构的根节点存在的
+     *      将来自定义的父子关系通过路径来进行关联父子关系，同时也是节点之间的挂载关系
+     */
+    @Test
+    public void testJulRelative(){
+
+
+        /**
+         * 根据包的结构
+         * logger是logger2 的父logger
+         * logger2是logger3是父logger
+         */
+        Logger logger1 = Logger.getLogger("cn.giteasy");
+        Logger logger2 = Logger.getLogger("cn.giteasy.jul");
+        Logger logger3 = Logger.getLogger("cn.giteasy.jul.test");
+
+        //获取logger2的父logger
+        Logger parentLogger = logger2.getParent();
+        System.out.println(parentLogger == logger1); //true
+
+
+
+        System.out.println("logger1的父Logger引用为：" + logger1.getParent()); //父Logger为 RootLogger
+        System.out.println("logger1名称为：" + logger1.getName());
+        System.out.println("logger1的父Logger名称为：" + logger1.getParent().getName()); //父logger为RootLogger,父logger为RootLogger的名字这是空字符串
+
+        System.out.println("==================================================");
+
+        System.out.println("logger2的父Logger引用为：" + logger2.getParent());
+        System.out.println("logger2名称为：" + logger2.getName());
+        System.out.println("logger2的父Logger名称为：" + logger2.getParent().getName());
+
+
+        /**
+         * logger1的父Logger引用为：java.util.logging.LogManager$RootLogger@61e717c2
+         * logger1名称为：cn.giteasy
+         * logger1的父Logger名称为：
+         * ==================================================
+         * logger2的父Logger引用为：java.util.logging.Logger@66cd51c3
+         * logger2名称为：cn.giteasy.jul
+         * logger2的父Logger名称为：cn.giteasy
+         */
+
+
+
+        /*
+            父Logger所做的设置，也同样作用于子Logger
+
+         */
+
+        // 对logger1做打印设置
+        logger1.setUseParentHandlers(false);
+        //控制台日志处理器
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        SimpleFormatter simpleFormatter = new SimpleFormatter();
+        consoleHandler.setFormatter(simpleFormatter);
+        logger1.addHandler(consoleHandler);
+
+        consoleHandler.setLevel(Level.ALL);
+        logger1.setLevel(Level.ALL);
+
+        //使用logger2打印
+        logger2.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger2.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+        //查看控制台打印结果，可知对父logger设置的打印参数，也会作用于子Logger
+
+    }
+
+    /**
+     * JUL 配置文件
+     * 前面所有配置相关的操作，都是以java硬编码的形式进行的
+     *
+     * 更加专业的一种做法，就是使用配置文件，如果我们没有自己添加配置文件，则会使用系统默认的配置文件
+     * 查看源码可知，配置文件的位置
+     *
+     *      owner.readPrimordialConfiguration();
+     *      readConfiguration();
+     *      java.home --> 找到jre文件夹 --> lib --> logging.properties
+     *
+     * $JAVA_HOME\jre\lib\logging.properties
+     *
+     */
+    @Test
+    public void testLogConfigurationFile() throws IOException {
+
+        String path = JULTest.class.getClass().getResource("/logging.properties").getFile().toString();
+        InputStream is = new FileInputStream(path);
+        LogManager logManager = LogManager.getLogManager();
+        logManager.readConfiguration(is);
+
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test");
+
+
+        //使用logger2打印
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+
+    /**
+     * 在配置文件中配置自定义Logger
+     * 输出位置
+     *
+     * %h:用户目录
+     * %u:序号，从0开始
+     * java.util.logging.FileHandler.pattern = %h/java%u.log
+     */
+    @Test
+    public void testMyLoggerForConfigFile() throws IOException {
+
+        String path = JULTest.class.getClass().getResource("/mylogger.properties").getFile().toString();
+        InputStream is = new FileInputStream(path);
+        LogManager logManager = LogManager.getLogManager();
+        logManager.readConfiguration(is);
+
+        Logger logger = Logger.getLogger("cn.giteasy.jul.test");
+
+
+        //使用logger2打印
+        logger.log(Level.SEVERE,"SEVERE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.WARNING,"WARNING>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.INFO,"INFO>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.CONFIG,"CONFIG>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINE,"FINE>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINER,"FINER>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.FINEST,"FINEST>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.log(Level.ALL,"ALL>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+
+
+
 }
