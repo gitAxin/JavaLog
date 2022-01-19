@@ -289,7 +289,7 @@ public class TestLog4jv1 {
      * 祥情配置，查看log4j.properties配置文件
      *
      *
-     * p43
+     *
      */
     @Test
     public void testOutputFile(){
@@ -302,4 +302,113 @@ public class TestLog4jv1 {
         logger.debug("DEBUG信息 =========testLog4j========= ");
         logger.trace("TRACE信息 =========testLog4j========= ");
     }
+
+
+    /**
+     *
+     * 将日志输出到文件中——按照文件大小进行拆分
+     * FileAppender为我们提供了好用的子类来进一步的对于文件输出进行处理
+     *  RollingFileAppender
+     *  DailyRollingFileAppender
+     *
+     *
+     *  1.RollingFileAppender
+     *          这个类表示使用按照文件大小进行拆分的方式进行操作
+     *          配置文件进行RollingFileAppender相关配置
+     *          观察RollingFileAppender的源码
+     *              protected long maxFilesize = 10485760L；表示拆分文件的大小
+     *              protected int maxBackupIndex = 1；表示拆分文件的数量
+     *
+     *      #指定日志文件大小，只要超过1MB，那么则生成另外一个文件
+     *      log4j.appender.rollingFileAppender.maxFileSize = 1MB
+     *      #指定文件数量，文件最多生成5个，超过5个，会覆盖时间最早的那个文件
+     *      log4j.appender.rollingFileAppender.maxBackupIndex = 5
+     *
+     *
+     */
+    @Test
+    public void testOutputFileSplit(){
+
+        Logger logger = Logger.getLogger(this.getClass());
+        for (int i = 0; i < 10000; i++) {
+
+            logger.fatal("FATAL信息 =========testLog4j========= ");
+            logger.error("ERROR信息 =========testLog4j========= ");
+            logger.warn("WARN信息 =========testLog4j========= ");
+            logger.info("INFO信息 =========testLog4j========= ");
+            logger.debug("DEBUG信息 =========testLog4j========= ");
+            logger.trace("TRACE信息 =========testLog4j========= ");
+        }
+
+
+    }
+
+    /**
+     * 将日志输出到文件中——按照文件大小进行拆分
+     * 2. DailyRollingFileAppender
+     * 按照时间来进行文件的拆分
+     *  查看源码属性：
+     *  private String datePattern = " "yyyy-MM-dd"；默认是按照天来进行拆分的
+     *
+     */
+    @Test
+    public void testOutputFileSplitForTime(){
+
+        Logger logger = Logger.getLogger(this.getClass());
+        for (int i = 0; i < 10000; i++) {
+
+            logger.fatal("FATAL信息 =========testLog4j========= ");
+            logger.error("ERROR信息 =========testLog4j========= ");
+            logger.warn("WARN信息 =========testLog4j========= ");
+            logger.info("INFO信息 =========testLog4j========= ");
+            logger.debug("DEBUG信息 =========testLog4j========= ");
+            logger.trace("TRACE信息 =========testLog4j========= ");
+        }
+
+
+    }
+
+
+    /**
+     * 将日志持久化到数据库
+     * 1. 创建表结构：
+     * （字段的制定可以根据需求进行调整）
+     *
+     *
+     *      CREATE TABLE my_log(
+     *              id int(11) NOT NULL AUTO_INCREMENT,
+     *              name varchar(255) DEFAULT NULL COMMENT '项目名称',
+     *              create_time varchar(255) DEFAULT NULL COMMENT '创建时间',
+     *              thread varchar(255) DEFAULT NULL COMMENT '线程名称',
+     *              level varchar(255) DEFAULT NULL COMMENT '日志级别',
+     *              category varchar(255) DEFAULT NULL COMMENT '所在类的全路径',
+     *              message varchar(255) DEFAULT NULL COMMENT '日志消息',
+     *              PRIMARY KEY(id)
+     *      )
+     * 2. 导入数据库驱动
+     *         <!-- 将日志持久化到数据库 -->
+     *         <dependency>
+     *             <groupId>mysql</groupId>
+     *             <artifactId>mysql-connector-java</artifactId>
+     *             <version>5.1.32</version>
+     *         </dependency>
+     *
+     * 3.配置log4j.properties
+     *
+     */
+
+    @Test
+    public void testOutputDatabase(){
+
+        Logger logger = Logger.getLogger(this.getClass());
+        logger.fatal("FATAL信息 =========testLog4j========= ");
+        logger.error("ERROR信息 =========testLog4j========= ");
+        logger.warn("WARN信息 =========testLog4j========= ");
+        logger.info("INFO信息 =========testLog4j========= ");
+        logger.debug("DEBUG信息 =========testLog4j========= ");
+        logger.trace("TRACE信息 =========testLog4j========= ");
+
+
+    }
+
 }
