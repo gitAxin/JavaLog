@@ -395,6 +395,8 @@ public class TestLog4jv1 {
      *
      * 3.配置log4j.properties
      *
+     *
+     * P50
      */
 
     @Test
@@ -410,5 +412,95 @@ public class TestLog4jv1 {
 
 
     }
+
+    /**
+     *  Log4j的自定义logger
+     *
+     * 目前为止我们所创建的Logger对象，默认都是继承rootLogger，配置文件中是这样配置的：
+     *      log4j.rootLogger = trace,consoleAppender,dbAppender
+     *
+     * 我们也可以自定义logger，让其他logger来继承这个logger，这种继承关系就是按照包结构的关系来进行指定的
+     *
+     * 例如我们一直使用的
+     *      Logger logger = Logger.getLogger(this.getClass());
+     * 路径就是：
+     *      cn.giteasy.log4j.test.TestLog4jv1
+     * 它的父logger就是上层的路径或者是更上层的路径,例如：
+     *      cn.giteasy.log4j.test
+     *      cn.giteasy.log4j
+     *      cn.giteasy
+     *      cn
+     *
+     * 参照Log4j源码是如何加载配置文件的？
+     * 在源码Propertyconfigurator类中，我们看到常量：log4j.logger.
+     * 这个属性值log4j.logger., 就是我们在配置文件中自定义logger时使用的前缀
+     * 例如我们自定义的Logger为：
+     *   log4j.logger.cn.giteasy.log4j.test = error,fileAppender
+     *
+     *
+     *如果自定义Logger与RootLogger都进行了配置，会使用哪个？
+     *
+     * 1. 如果自定义Logger与RootLogger配置的输出位置是不同的 则取二者的并集，配置的位置都会进行输出操作
+     * 2. 如果自定义Logger与RootLogger配置的日志级别不同，以自定的父logger的级别进行输出
+     */
+    @Test
+    public void testCustomLog(){
+
+        Logger logger = Logger.getLogger(this.getClass());
+        logger.fatal("FATAL信息 =========testLog4j========= ");
+        logger.error("ERROR信息 =========testLog4j========= ");
+        logger.warn("WARN信息 =========testLog4j========= ");
+        logger.info("INFO信息 =========testLog4j========= ");
+        logger.debug("DEBUG信息 =========testLog4j========= ");
+        logger.trace("TRACE信息 =========testLog4j========= ");
+    }
+
+    /**
+     *
+     *  自定义logger的应用场景
+     *  我们之所以要自定义logger，就是为了针对不同系统、不同包路径下的输出信息做更加灵活的输出操作
+     *  例如：
+     *      我们，需要对org.apache包下的日志单独进行配置
+     *
+     *          log4j.logger.org.apache=error,consoleAppender
+     *
+     */
+
+    @Test
+    public void testCustomApply(){
+        //模拟当前是在org.apache包下进行输出
+        //Logger类本身就是org.apache.log4j包下的类
+
+        //Logger logger = Logger.getLogger("org.apache");
+        Logger logger = Logger.getLogger(Logger.class);
+        logger.fatal("apache FATAL信息 =========apache testLog4j========= ");
+        logger.error("apache ERROR信息 =========apache testLog4j========= ");
+        logger.warn("apache WARN信息 =========apache testLog4j========= ");
+        logger.info("apache INFO信息 =========apache testLog4j========= ");
+        logger.debug("apache DEBUG信息 =========apache testLog4j========= ");
+        logger.trace("apache TRACE信息 =========apache testLog4j========= ");
+
+
+        /**
+         * 输出结果：
+         * 2022-01-22 15:05:51.027 [main] FATAL cn.giteasy.log4j.test.TestLog4jv1.testCustomApply(TestLog4jv1.java:475) apache FATAL信息 =========apache testLog4j=========
+         * 2022-01-22 15:05:51.027 [main] FATAL cn.giteasy.log4j.test.TestLog4jv1.testCustomApply(TestLog4jv1.java:475) apache FATAL信息 =========apache testLog4j=========
+         * 2022-01-22 15:05:51.393 [main] ERROR cn.giteasy.log4j.test.TestLog4jv1.testCustomApply(TestLog4jv1.java:476) apache ERROR信息 =========apache testLog4j=========
+         * 2022-01-22 15:05:51.393 [main] ERROR cn.giteasy.log4j.test.TestLog4jv1.testCustomApply(TestLog4jv1.java:476) apache ERROR信息 =========apache testLog4j=========
+         *
+         *
+         * 观查输出结果，发现每条日志各输出了2次，因为我们在配置文件中，consoleAppender配置了2次，由于输出的位置appender取的是并集，所以输出2次
+         *
+         *      log4j.rootLogger = trace,consoleAppender,dbAppender
+         *
+         *      #配置apache的Logger
+         *      log4j.logger.org.apache = error,consoleAppender
+         *
+         * 为了防止输出2次，我们可以将自定义log4j.logger.org.apache日志的consoleAppender日志去掉
+         *
+         */
+
+    }
+
 
 }
