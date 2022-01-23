@@ -5,13 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>SLF4J</artifactId>
+    <artifactId>SLF4J_ACTION</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
 
     <dependencies>
 
@@ -21,50 +22,32 @@
             <version>4.13.2</version>
         </dependency>
 
+
+        <!--<dependency>-->
+        <!--    <groupId>log4j</groupId>-->
+        <!--    <artifactId>log4j</artifactId>-->
+        <!--    <version>1.2.17</version>-->
+        <!--</dependency>-->
+
+
         <!--slf4j日志门面 核心信赖-->
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.32</version>
         </dependency>
 
-        <!--导入slf4j-nop-->
-        <!-- no print-->
-        <!--<dependency>-->
-        <!--    <groupId>org.slf4j</groupId>-->
-        <!--    <artifactId>slf4j-nop</artifactId>-->
-        <!--    <version>1.7.32</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.32</version>
+        </dependency>
 
-       <!--slf4j自带的简单日志实现-->
-        <!--
-            在没有任何其他日志实现框架集成的基础之上， slf4j使用的就是自带的框架slf4j-simple
-            slf4j-simple也必须以单独依赖的形式导入进来
-         -->
-        <!--<dependency>-->
-        <!--    <groupId>org.slf4j</groupId>-->
-        <!--    <artifactId>slf4j-simple</artifactId>-->
-        <!--    <version>1.7.32</version>-->
-        <!--</dependency>-->
-
-
-        <!--集成logback-->
-        <!--
-            logback-core是logback-classic的基础模块
-            logback-classic已经涵盖了 logback-core，
-            Maven有信赖传递性，会自动依赖logback-core
-         -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.10</version>
         </dependency>
-
-
-
-
-
     </dependencies>
 
 </project>

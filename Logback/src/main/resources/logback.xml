@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <!--
+        <property name="" value=""></property>
+        配置文件通用属性,通过${name}的形式取值
+    -->
+    <property name="logDir" value="D://logback_log"></property>
+    <!-- <property name="logDir" value="${sys:catalina.home}"></property>-->
+    <property name="fileName" value="logback.log"></property>
+    <property name="htmlFileName" value="logback.html"></property>
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %c %M %L %m%n"></property>
+    <property name="htmlPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS}%thread%-5level%c%M%L%m"></property>
+
+
+    <!-- 控制台Appender -->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <!--
+            输出目标的配置，
+            System.out：以黑色字体（默认）
+            System.err：红色字体
+        -->
+        <target>
+            System.err
+        </target>
+        <!-- 日志输出格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--文件appender，默认是以追加日志的形式进行输出的-->
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <!--输出文件位置-->
+        <file>${logDir}//${fileName}</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!--HTML文件appender-->
+    <appender name="htmlFileAppender" class="ch.qos.logback.core.FileAppender">
+        <!--输出文件位置-->
+        <file>${logDir}//${htmlFileName}</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.html.HTMLLayout">
+                <pattern>${htmlPattern}</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+
+    <!--
+        日志记录器配置，可以配置多个Appender，进行多方向的日志输出
+        root => rootLogger
+        level:  表示日志级别
+
+    -->
+    <root level="ALL">
+        <appender-ref ref="consoleAppender"/>
+
+        <appender-ref ref="htmlFileAppender"/>
+    </root>
+
+</configuration>
+
+
+
+<!--
+    标识符及占位符	                    描述
+
+    %-10level	                    级别，设置10个这符，左对齐
+    %d{yyyy-MM-dd HH:mm:ss.SSS}	    日期时间
+    %c	                            当前类全限定名
+    %M	                            当前执行日志的方法
+    %L	                            行号
+    %thread             	        线程名称
+    %m或者%msg	                    输出的日志信息
+    %n	                            换行
+ -->

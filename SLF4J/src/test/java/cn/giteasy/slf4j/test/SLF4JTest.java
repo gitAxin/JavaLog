@@ -178,4 +178,97 @@ public class SLF4JTest {
         logger.debug("========= DEBUG信息 test slf4j =========");
         logger.trace("========= TRACE信息 test slf4j =========");
     }
+
+
+    /**
+     * 绑定多个日志实现，会出现警告信息
+     *
+     * 通过源码查看其原理（看看slf4j的执行原理）
+     *
+     * 进入到getLogger()方法,可看到：
+     *      Logger logger = getLogger(clazz.getName());
+     * 继续进入getLogger。可看到：
+     *      ILoggerFactory iLoggerFactory = getILoggerFactory();//用来取得Logger工厂实现的方法
+     *
+     * 进入getILoggerFactory，看到以双重检查锁的方式去做判断
+     *      执行performInitialization(）；工厂的初始化方法
+     * 进入performInitialization(）
+     *      bind()就是用来绑定具体日志实现的方法
+     * 进入bind()
+     *
+     * 看到Set集合
+     *      Set<URL> staticLoggerBinderPathSet = null;
+     * 因为当前有可能会有N多个日志框架的实现
+     * 看到staticLoggerBinderPathset = findPossibleStaticLoggerBinderPathSet();
+     * 进入findPossibleStaticLoggerBinderPathSet()
+     * 看到创建了一个有序不可重复的集合对象
+     *      LinkedHashset staticLoggerBinderPathSet = new LinkedHashSet();
+     * 声明了枚举类的路径，经过if else判断，以获取系统中都有哪些日志实现
+     * 看到Enumeration paths；
+     *      if (loggerFactoryClassLoader == null) {
+     *          paths = classLoader.getSystemResources(STATIC_LOGGER_BINDER_PATH);
+     *      } else {
+     *          paths = loggerFactoryClassLoader.getResources(STATIC_LOGGER_BINDER_PATH);
+     *      }
+     *
+     *
+     *  我们主要观察常量STATIC_LOGGER_BINDER_PATH
+     *      通过常量我们会找到类org/slf4j/impl/StaticLoggerBinder.class
+     * 这个类是以静态的方式绑定Logger实现的类
+     *
+     *1.StaticLoggerBinder来自slf4j-simple,如果当前项目引入了slf4j-simple的适配器.
+     * 进入StaticLoggerBinder看到：
+     *      private final ILoggerFactory loggerFactory = new SimpleLoggerFactory();
+     *  进入SimpleLoggerFactory类，看到：
+     *              getLogger()方法
+     *   看到  Logger newInstance = new SimpleLogger(name);
+     *   使用的就是slf4j-simple的Logger
+     *
+     *2.StaticLoggerBinder来自slf4j-jdk14,如果当前项目引入了slf4j-jdk14的适配器.(当前项目如何没有引入任何日志实现，则使用的是JUL)
+     * 进入StaticLoggerBinder看到：
+     *          new JDK14LoggerFactory();
+     * 进入JDK14LoggerFactory类的无参构造方法,看到:
+     *      java.util.logging.Logger.getLogger("");
+     * 使用的就是jul的Logger
+     *
+     *
+     * 接着观察findPossiblestaticLoggerBinderPathset
+     *  看到以下代码，表示如果还有其他的日志实现
+     *          while(paths.hasMoreElements()){
+     *              URL path = (URL)paths.nextElement();
+     *              //将路径添加进入
+     *              staticLoggerBinderPathset.add(path);
+     *           }
+     *
+     * 回到bind方法
+     * 表示对于绑定多实现的处理
+     *      reportMultipleBindingAmbiguity(staticLoggerBinderPathSet);
+     * 如果出现多日志实现的情况,则会打印
+     *      Util.report("Class path contains multiple SLF4J bindings.");
+     *
+     *
+     * 总结：
+     *  在真实生产环境中，slf4j只绑定一个日志实现框架就可以了,绑定多个，默认使用导入依赖的第一个，而且会产生没有必要的警告信息.
+     */
+    @Test
+    public void testMultiLogInfo(){
+
+
+        Logger logger = LoggerFactory.getLogger(SLF4JTest.class);
+        logger.error("========= ERROR信息 test slf4j =========");
+        logger.warn("========= WARN信息 test slf4j =========");
+        logger.info("========= INFO信息 test slf4j =========");
+        logger.debug("========= DEBUG信息 test slf4j =========");
+        logger.trace("========= TRACE信息 test slf4j =========");
+
+
+        /**
+         * SLF4J: Class path contains multiple SLF4J bindings.
+         * SLF4J: Found binding in [jar:file:/C:/Users/Administrator/.m2/repository/org/slf4j/slf4j-simple/1.7.32/slf4j-simple-1.7.32.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+         * SLF4J: Found binding in [jar:file:/C:/Users/Administrator/.m2/repository/ch/qos/logback/logback-classic/1.2.10/logback-classic-1.2.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+         * SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+         * SLF4J: Actual binding is of type [org.slf4j.impl.SimpleLoggerFactory]
+         */
+    }
+
 }
