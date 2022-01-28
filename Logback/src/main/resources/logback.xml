@@ -50,6 +50,46 @@
         </encoder>
     </appender>
 
+    <!--可拆分归档的appender-->
+    <appender name="rollFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+        <file>${logDir}/roll_logback.log</file>
+        <!--指定拆分规则-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--按照时间和压缩格式声明文件名，压缩格式gz-->
+            <fileNamePattern>${logDir}/roll_logback.%d{yyyy-MM-dd}.log%i.gz</fileNamePattern>
+            <!--按照文件大小进行拆分-->
+            <maxFileSize>2KB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <!--使用过滤器,进行细粒度控制-->
+    <appender name="consoleFilterAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <target>
+            System.err
+        </target>
+        <!-- 日志输出格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <!--高于level中设置的级别，则打印日志-->
+            <onMatch>ACCEPT</onMatch>
+
+            <!--低于level中设置的级别，则屏蔽-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+    </appender>
+
+    <!--异步日志Appender-->
+    <appender name="asyncAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="consoleAppender"/>
+    </appender>
 
     <!--
         日志记录器配置，可以配置多个Appender，进行多方向的日志输出
@@ -58,10 +98,20 @@
 
     -->
     <root level="ALL">
-        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="asyncAppender"/>
+        <!--<appender-ref ref="consoleFilterAppender"/>-->
 
-        <appender-ref ref="htmlFileAppender"/>
+        <!-- <appender-ref ref="rollFileAppender"/>-->
     </root>
+
+
+    <!--
+        自定义Logger
+        additivity="false" 表示不继承rootLogger
+      -->
+    <logger name="cn.giteasy" level="warn" additivity="false">
+        <appender-ref ref="consoleAppender"></appender-ref>
+    </logger>
 
 </configuration>
 

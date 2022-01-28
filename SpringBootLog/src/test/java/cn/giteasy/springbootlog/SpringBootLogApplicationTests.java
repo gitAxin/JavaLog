@@ -38,7 +38,7 @@ class SpringBootLogApplicationTests {
     }
 
     /**
-     *观罕log4j-to-slf4j桥接器是否起作用
+     *观察log4j-to-slf4j桥接器是否起作用
      */
     @Test
     public void testLog4jToSlf4j(){
