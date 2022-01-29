@@ -83,7 +83,7 @@ public class SLF4JTest {
     /**
      * 观察SLF4J官网提供的图
      *
-     * SLF43日志门面，共有3种情况对日志实现进行绑定
+     * SLF4J日志门面，共有3种情况对日志实现进行绑定
      *
      * 1.在没有绑定任何日志实现的基础之上，日志是不能够绑定实现任何功能的;
      * 注意：slf4j-simple是虽然是slf4j官方提供的，使用的时候，也是需要导入依赖，自动绑定到slf4j门面上，如果不导入，slf4j核心依赖是不提供任何实现的。
@@ -96,7 +96,7 @@ public class SLF4JTest {
      *
      *
      *
-     * 添加logback信赖，集成logback日志框架
+     * 添加logback依赖，集成logback日志框架
      * 在集成了slf4j-simple依赖基础上，添加logback依赖
      *
      * 控制台打印：
@@ -105,7 +105,7 @@ public class SLF4JTest {
      *  ...
      * SLF4J: Actual binding is of type [org.slf4j.impl.SimpleLoggerFactory]//当出现多个日志实现时，实际绑定的依赖
      *
-     * 说明在当前项目中有多个实现信赖，但实际使用的还是slf4j-simple
+     * 说明在当前项目中有多个实现依赖，但实际使用的还是slf4j-simple
      *
      * 原因：因为是先导入的slf4j-simple依赖，所以默认还是使用slf4j-simple,
      *  如果希望使用指定的日志实现，需要在pom文件中修改引入的顺序，将指定的依赖放到前面。
@@ -236,7 +236,7 @@ public class SLF4JTest {
      *  看到以下代码，表示如果还有其他的日志实现
      *          while(paths.hasMoreElements()){
      *              URL path = (URL)paths.nextElement();
-     *              //将路径添加进入
+     *              //将路径添加进入staticLoggerBinderPathset
      *              staticLoggerBinderPathset.add(path);
      *           }
      *

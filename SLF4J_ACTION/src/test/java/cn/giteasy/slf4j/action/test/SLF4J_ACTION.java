@@ -149,7 +149,7 @@ public class SLF4J_ACTION {
      * 在这个Category构造方法中:
      *      this.slf4jLogger = LoggerFactory.getLogger(name);
      *
-     *  LoggerFactory来自于org.slf4jl,这就证明了getLogger是来自slf4j的。
+     *  LoggerFactory来自于org.slf4j,这就证明了getLogger是来自slf4j的。
      */
     @Test
     public void test03(){

@@ -46,7 +46,7 @@ public class JCLTest {
     }
 
     /**
-     *引入log4j信赖后
+     *引入log4j依赖后
      */
     @Test
     public void testUCL_Log4j(){

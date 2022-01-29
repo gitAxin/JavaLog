@@ -21,7 +21,7 @@
             <version>4.13.2</version>
         </dependency>
 
-        <!--slf4j日志门面 核心信赖-->
+        <!--slf4j日志门面 核心依赖-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -31,7 +31,7 @@
         <!--
            logback-core是logback-classic的基础模块
            logback-classic已经涵盖了 logback-core，
-           Maven有信赖传递性，会自动依赖logback-core
+           Maven有依赖传递性，会自动依赖logback-core
         -->
         <dependency>
             <groupId>ch.qos.logback</groupId>

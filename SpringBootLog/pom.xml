@@ -21,7 +21,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
-                <!--排除掉原始日志信赖，达到去除logback信赖的目的-->
+                <!--排除掉原始日志依赖，达到去除logback依赖的目的-->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
@@ -29,13 +29,13 @@
             </exclusions>
         </dependency>
 
-        <!--添加log4j2信赖-->
+        <!--添加log4j2依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
-        <!--异步日志依赖,如果log4j2.xml配置文件中配置使用了异步日志，不添加此信赖运行会报错，这是实现异步日志必须的信赖-->
+        <!--异步日志依赖,如果log4j2.xml配置文件中配置使用了异步日志，不添加此依赖运行会报错，这是实现异步日志必须的依赖-->
         <!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
         <dependency>
             <groupId>com.lmax</groupId>

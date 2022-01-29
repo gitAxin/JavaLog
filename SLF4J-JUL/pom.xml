@@ -20,7 +20,7 @@
             <version>4.13.2</version>
         </dependency>
 
-        <!--slf4j日志门面 核心信赖-->
+        <!--slf4j日志门面 核心依赖-->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -79,7 +79,7 @@ public class JULTest {
         /*
         日志的级别（可通过源码查看）java.util.logging.Level
         SEVERE  :   错误              最高级的日志级别
-        NARNING :   警告
+        WARNING :   警告
         INFO    :   （默认级别）消息
         CONFIG  :   配置
         FINE    :   详细信息（少）

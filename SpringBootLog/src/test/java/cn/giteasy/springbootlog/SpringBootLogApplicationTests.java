@@ -160,17 +160,17 @@ class SpringBootLogApplicationTests {
      * springboot默认使用的是slf4j+logback的组合，
      * 但我们可以将默认的logback置换为log4j2
      *
-     * 1.启动器的信赖，间接的信赖logback,所以需要将之前的环境中,logback的信赖去除
+     * 1.启动器的依赖，间接的依赖logback,所以需要将之前的环境中,logback的依赖去除
      *
      *              <exclusions>
-     *                 <!--排除掉原始日志信赖，达到去除logback信赖的目的-->
+     *                 <!--排除掉原始日志依赖，达到去除logback依赖的目的-->
      *                 <exclusion>
      *                     <groupId>org.springframework.boot</groupId>
      *                     <artifactId>spring-boot-starter-logging</artifactId>
      *                 </exclusion>
      *             </exclusions>
      *
-     * 2. 添加log4j2的信赖
+     * 2. 添加log4j2的依赖
      *         <dependency>
      *             <groupId>org.springframework.boot</groupId>
      *             <artifactId>spring-boot-starter-log4j2</artifactId>

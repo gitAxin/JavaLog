@@ -40,6 +40,7 @@ public class SLF4J_LOG4J_TEST {
          *
          * 很熟悉的打印结果，这是已经绑定了log4j日志实现，之所以打印这些信息，是因为没有配置Appender
          * 配置了Appender或添加了配置文件后，就可以使用了
+         *
          */
 
 

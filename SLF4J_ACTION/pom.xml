@@ -30,7 +30,7 @@
         <!--</dependency>-->
 
 
-        <!--slf4j日志门面 核心信赖-->
+        <!--slf4j日志门面 核心依赖-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

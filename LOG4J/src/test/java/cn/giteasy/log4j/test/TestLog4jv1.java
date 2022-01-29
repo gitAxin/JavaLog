@@ -22,7 +22,7 @@ public class TestLog4jv1 {
 
         /**
          *
-         * 注释配置初始化信息：
+         * 配置初始化信息：
          *  BasicConfigurator.configure();
          *  如果不进行此项配置，会报如下警告
          *
@@ -344,7 +344,7 @@ public class TestLog4jv1 {
     }
 
     /**
-     * 将日志输出到文件中——按照文件大小进行拆分
+     * 将日志输出到文件中——按照时间进行拆分
      * 2. DailyRollingFileAppender
      * 按照时间来进行文件的拆分
      *  查看源码属性：
@@ -395,8 +395,8 @@ public class TestLog4jv1 {
      *
      * 3.配置log4j.properties
      *
+     *  祥情本项目资源路径下配置文件log4j.properties
      *
-     * P50
      */
 
     @Test
