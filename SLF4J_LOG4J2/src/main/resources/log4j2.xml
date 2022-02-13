@@ -45,7 +45,7 @@ Configuration 标签添加属性
     filePattern: 日志文件拆分后文件的命名规则
 
 -->
-        <RollingFile name="rollingFile"
+        <RollingFile name="rollingFileAppender"
                      fileName="${logDir}//${rollLogName}"
                      filePattern="${logDir}//${rollFilePattern}">
             <PatternLayout pattern="${pattern}"/>
@@ -75,7 +75,7 @@ Configuration 标签添加属性
         <Root level="trace">
             <AppenderRef ref="consoleAppender"/>
             <!--<AppenderRef ref="fileAppender"/>-->
-            <!--<AppenderRef ref="rollingFile"/>-->
+            <!--<AppenderRef ref="rollingFileAppender"/>-->
 
             <!--<AppenderRef ref="asyncAppender"/>-->
         </Root>

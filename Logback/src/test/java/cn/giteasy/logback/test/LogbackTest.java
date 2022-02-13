@@ -221,7 +221,7 @@ public class LogbackTest {
      * 1. 异步日志
      *    可配置属性:
      *      当队列的剩余容量小于这个阈值的时候，当前日志的级别 trace、debug、info这3个级别的日志将被丢弃
-     *      设置为O，说明永远都不会丢弃trace、debug、info这3个级
+     *      设置为0，说明永远都不会丢弃trace、debug、info这3个级
      *              <discardingThreshold>0</discardingThreshold>
      *       配置队列的深度，这个值会影响记录日志的性能，默认值256
      *              <queueSize>256</queueSize>

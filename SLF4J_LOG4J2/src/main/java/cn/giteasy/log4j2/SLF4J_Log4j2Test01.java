@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 虽然log4j2也是日志门面，但是现在主流趋势仍然是slf4j，
- * 故我们扔需要使用slf4j作为日志门面，搭配log4j2强大的日志实现，进行日志的相关操作
+     * 虽然log4j2也是日志门面，但是现在主流趋势仍然是slf4j，
+     * 故我们扔需要使用slf4j作为日志门面，搭配log4j2强大的日志实现，进行日志的相关操作
  *
- * 此Demo为当今市场上最强大，最主流的日志框架搭配方式：
- * slf4j+log4j2
+     * 此Demo为当今市场上最强大，最主流的日志框架搭配方式：
+     * slf4j+log4j2
  *
  * @author axin
  * @date 2021/12/26
